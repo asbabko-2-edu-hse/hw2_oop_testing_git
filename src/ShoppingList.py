@@ -1,3 +1,7 @@
+from src.Recipe import Recipe
+from src.Ingredient import Ingredient
+from typing import List, Tuple
+
 class ShoppingList:
   def __init__(self) -> None:
     self._items: List[Tuple[Ingredient, str]] = []
@@ -30,7 +34,7 @@ class ShoppingList:
     shoppingList.sort(key=lambda y: y.name)
     return shoppingList
 
-  def __add__(self, other: ShoppingList) -> ShoppingList:
+  def __add__(self, other: 'ShoppingList') -> 'ShoppingList':
     nList = ShoppingList()
     nList._items = self._items.copy()
     nList._items.extend(other._items)
