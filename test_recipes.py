@@ -99,3 +99,46 @@ def test_add():
   assert len(sList._items) == 5
   assert len(shoppingList1._items) == 3
   assert len(shoppingList2._items) == 2
+import pytest
+from src.Recipe import Recipe
+from src.Ingredient import Ingredient
+
+def test_create_recipe():
+  ingredients = [Ingredient("Мука", 150.0, "г"), Ingredient("Вишня", 150.0, "г"), Ingredient("Шоколад", 200.0, "г")]
+  recipe = Recipe("Брауни с вишней", ingredients)
+  assert recipe.title == "Брауни с вишней"
+  assert len(recipe) == 3
+
+def test_add_ingredient():
+  recipe = Recipe("Брауни с вишней")
+  flour = Ingredient("Мука", 100.0, "г")
+  recipe.add_ingredient(flour)
+  assert len(recipe) == 1
+
+def test_change_quantity_when_add_ingredient():
+  ingredients = [Ingredient("Мука", 150.0, "г")]
+  recipe = Recipe("Брауни с вишней", ingredients)
+  flour = Ingredient("Мука", 100.0, "г")
+  recipe.add_ingredient(flour)
+  assert len(recipe) == 1
+  ingredients = recipe._ingredients
+  assert ingredients[0].quantity == 250.0
+
+def test_scale_new_recipe():
+  ingredients = [Ingredient("Мука", 150.0, "г")]
+  recipe = Recipe("Брауни с вишней", ingredients)
+  updatedRecipe = recipe.scale(2)
+  assert recipe._ingredients[0].quantity == 150.0
+  assert updatedRecipe._ingredients[0].quantity == 300.0
+  assert recipe is not updatedRecipe
+
+def test_scale_inappropriate_ratio():
+  ingredients = [Ingredient("Мука", 150.0, "г")]
+  recipe = Recipe("Брауни с вишней", ingredients)
+  with pytest.raises(ValueError, match = "Коэффициент должен быть положительным числом"):
+    recipe.scale(-1)
+
+def test_len():
+  ingredients = [Ingredient("Мука", 150.0, "г")]
+  recipe = Recipe("Брауни с вишней", ingredients)
+  assert len(recipe) == 1
