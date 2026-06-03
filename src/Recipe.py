@@ -1,7 +1,9 @@
+from src.Ingredient import Ingredient
+
 class Recipe:
   def __init__(self, title: str, ingredients: list = None) -> None:
     self.title = title
-    self._ingredients = ingredients
+    self._ingredients = ingredients if ingredients is not None else []
 
   def add_ingredient(self, ingredient: Ingredient) -> None:
     for x in self._ingredients:
@@ -12,7 +14,10 @@ class Recipe:
 
   @staticmethod
   def is_valid_ratio(ratio) -> bool:
-    return float(ratio) > 0
+    try:
+      return float(ratio) > 0
+    except (TypeError, ValueError):
+      return False
 
   def scale(self, ratio: float):
     if self.is_valid_ratio(ratio):
@@ -22,6 +27,9 @@ class Recipe:
         updatedIngredient = Ingredient(x.name, x.quantity * ratio, x.unit)
         updatedIngredients.append(updatedIngredient)
       return Recipe(self.title, updatedIngredients)
+    else:
+      raise ValueError("Коэффициент должен быть положительным числом")
+
 
   def __len__(self) -> int:
     return len(self._ingredients)
